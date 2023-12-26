@@ -16,7 +16,7 @@
     </form> --}}
 
     <p class="my-4 text-sm text-gray-600 dark:text-gray-400">
-        Or
+        Add or update user avatar
     </p>
 
     @if (session('message'))
