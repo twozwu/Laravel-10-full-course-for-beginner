@@ -2,6 +2,13 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
+    <form method="POST" action="{{ route('login.github') }}" class="block text-center mb-5">
+        @csrf
+        <x-primary-button>
+            Login with Github
+        </x-primary-button>
+    </form>
+
     <form method="POST" action="{{ route('login') }}">
         @csrf
 

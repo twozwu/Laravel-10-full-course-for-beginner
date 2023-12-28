@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Profile\AvatarController;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +16,7 @@ use App\Http\Controllers\Profile\AvatarController;
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
-*/
+ */
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,4 +33,25 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
+
+Route::post('/auth/redirect', function () {
+    return Socialite::driver('github')->redirect();
+})->name('login.github');
+
+Route::get('/auth/callback', function () {
+    // 取得使用者資訊
+    $user = Socialite::driver('github')->stateless()->user();
+
+    // 如果 email 已存在就更新，否則創建
+    $user = User::updateOrCreate([
+        'email' => $user->email,
+    ], [
+        'name' => $user->name,
+        'password' => 'password',
+    ]);
+    Auth::login($user);
+    return redirect('/dashboard');
+    // dd($user);
+    // $user->token
+});
