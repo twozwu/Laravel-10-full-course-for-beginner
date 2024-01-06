@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Profile\AvatarController;
+use App\Http\Controllers\TicketController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -54,4 +55,13 @@ Route::get('/auth/callback', function () {
     return redirect('/dashboard');
     // dd($user);
     // $user->token
+});
+
+Route::middleware('auth')->prefix('ticket')->group(function () {
+    // 一個個自訂：
+    // Route::get('/ticket/create', [TicketController::class, 'create'])->name('ticket.create');
+    // Route::post('/ticket/create', [TicketController::class, 'store'])->name('ticket.store');
+
+    // 一氣呵成：
+    Route::resource('/', TicketController::class);
 });
