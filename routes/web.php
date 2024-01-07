@@ -57,11 +57,11 @@ Route::get('/auth/callback', function () {
     // $user->token
 });
 
-Route::middleware('auth')->prefix('ticket')->group(function () {
+Route::middleware('auth')->group(function () {
     // 一個個自訂：
     // Route::get('/ticket/create', [TicketController::class, 'create'])->name('ticket.create');
     // Route::post('/ticket/create', [TicketController::class, 'store'])->name('ticket.store');
 
     // 一氣呵成：
-    Route::resource('/', TicketController::class);
+    Route::resource('ticket', TicketController::class);
 });
