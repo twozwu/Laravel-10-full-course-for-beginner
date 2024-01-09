@@ -43,12 +43,7 @@ class TicketController extends Controller
         ]);
 
         if ($request->file('attachment')) {
-            $ext = $request->file('attachment')->extension(); // 取得副檔名
-            $contents = file_get_contents($request->file('attachment'));
-            $filename = Str::random(25);
-            $path = "attachment/$filename.$ext";
-            Storage::disk('public')->put($path, $contents);
-            $ticket->update(['attachment' => $path]);
+            $this->storeAttachment($request, $ticket);
         }
         return response()->redirect(route('ticket.index'));
     }
@@ -66,7 +61,7 @@ class TicketController extends Controller
      */
     public function edit(Ticket $ticket)
     {
-        //
+        return view('ticket.edit', compact('ticket'));
     }
 
     /**
@@ -74,7 +69,16 @@ class TicketController extends Controller
      */
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
-        //
+        // $ticket->update($request->validated()); // 此方式會更新所有欄位，會把附件洗掉
+        $ticket->update(['title' => $request->title, 'description' => $request->description]); // 只修改非附件欄位
+
+        // 先刪除後存檔
+        if ($request->file('attachment')) {
+            Storage::disk('public')->delete($ticket->attachment);
+            $this->storeAttachment($request, $ticket);
+        }
+
+        return redirect(route('ticket.index'));
     }
 
     /**
@@ -84,5 +88,17 @@ class TicketController extends Controller
     {
         $ticket->delete();
         return back();
+    }
+
+    protected function storeAttachment($request, $ticket)
+    {
+        if ($request->file('attachment')) {
+            $ext = $request->file('attachment')->extension(); // 取得副檔名
+            $contents = file_get_contents($request->file('attachment'));
+            $filename = Str::random(25);
+            $path = "attachment/$filename.$ext";
+            Storage::disk('public')->put($path, $contents);
+            $ticket->update(['attachment' => $path]);
+        }
     }
 }

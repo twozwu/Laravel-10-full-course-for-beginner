@@ -10,7 +10,9 @@
                 @endif
             </div>
             <div class="flex gap-4">
-                <x-primary-button>Edit</x-primary-button>
+                <a href="{{ route('ticket.edit', $ticket) }}">
+                    <x-primary-button>Edit</x-primary-button>
+                </a>
                 <form action="{{ route('ticket.destroy', $ticket) }}" method="POST" class="inline">
                     @csrf
                     @method('delete')
