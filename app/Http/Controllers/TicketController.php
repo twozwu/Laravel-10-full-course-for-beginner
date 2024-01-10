@@ -45,7 +45,7 @@ class TicketController extends Controller
         if ($request->file('attachment')) {
             $this->storeAttachment($request, $ticket);
         }
-        return response()->redirect(route('ticket.index'));
+        return redirect(route('ticket.index'));
     }
 
     /**
@@ -87,7 +87,7 @@ class TicketController extends Controller
     public function destroy(Ticket $ticket)
     {
         $ticket->delete();
-        return back();
+        return redirect(route('ticket.index'));
     }
 
     protected function storeAttachment($request, $ticket)

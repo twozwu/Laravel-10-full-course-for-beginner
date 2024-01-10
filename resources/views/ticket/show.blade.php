@@ -9,16 +9,27 @@
                     <a href="{{ '/storage/' . $ticket->attachment }}" target="_blank">Attachment</a>
                 @endif
             </div>
-            <div class="flex gap-4">
-                <a href="{{ route('ticket.edit', $ticket) }}">
-                    <x-primary-button>Edit</x-primary-button>
-                </a>
-                <form action="{{ route('ticket.destroy', $ticket) }}" method="POST" class="inline">
-                    @csrf
-                    @method('delete')
-                    <x-primary-button>Delete</x-primary-button>
-                </form>
+            <div class="flex gap-4 justify-between">
+                <div class="flex gap-4">
+                    <a href="{{ route('ticket.edit', $ticket) }}">
+                        <x-primary-button>Edit</x-primary-button>
+                    </a>
+                    <form action="{{ route('ticket.destroy', $ticket) }}" method="POST" class="inline">
+                        @csrf
+                        @method('delete')
+                        <x-primary-button>Delete</x-primary-button>
+                    </form>
+                    <div class="flex gap-4">
+                        <a href="{{ route('ticket.edit', $ticket) }}">
+                            <x-primary-button>Approve</x-primary-button>
+                        </a>
+                        <form action="{{ route('ticket.destroy', $ticket) }}" method="POST" class="inline">
+                            @csrf
+                            @method('delete')
+                            <x-primary-button>Reject</x-primary-button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 </x-app-layout>
