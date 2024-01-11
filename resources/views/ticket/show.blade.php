@@ -19,17 +19,25 @@
                         @method('delete')
                         <x-primary-button>Delete</x-primary-button>
                     </form>
+                </div>
+                @if (auth()->user()->isAdmin)
                     <div class="flex gap-4">
-                        <a href="{{ route('ticket.edit', $ticket) }}">
-                            <x-primary-button>Approve</x-primary-button>
-                        </a>
-                        <form action="{{ route('ticket.destroy', $ticket) }}" method="POST" class="inline">
+                        <form action="{{ route('ticket.update', $ticket) }}" method="POST">
                             @csrf
-                            @method('delete')
+                            @method('patch')
+                            <input type="hidden" name="status" value="approved" />
+                            <x-primary-button>Approve</x-primary-button>
+                        </form>
+                        <form action="{{ route('ticket.update', $ticket) }}" method="POST" class="inline">
+                            @csrf
+                            @method('patch')
+                            <input type="hidden" name="status" value="rejected" />
                             <x-primary-button>Reject</x-primary-button>
                         </form>
                     </div>
-                </div>
+                @else
+                    <p>Status： {{ $ticket->status }}</p>
+                @endif
             </div>
         </div>
 </x-app-layout>

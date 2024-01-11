@@ -70,7 +70,8 @@ class TicketController extends Controller
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
         // $ticket->update($request->validated()); // 此方式會更新所有欄位，會把附件洗掉
-        $ticket->update(['title' => $request->title, 'description' => $request->description]); // 只修改非附件欄位
+        // $ticket->update(['title' => $request->title, 'description' => $request->description]); // 只修改非附件欄位
+        $ticket->update($request->except('attachment')); // 此方式不會更新附件 (上面簡化)
 
         // 先刪除後存檔
         if ($request->file('attachment')) {
