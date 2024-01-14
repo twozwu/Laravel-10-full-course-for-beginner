@@ -17,11 +17,12 @@ class TicketController extends Controller
      */
     public function index()
     {
-        $tickets = Ticket::all();
-        // return view('ticket.index')->with('tickets', $tickets);
-        // return view('ticket.index', ['tickets' => $tickets]);
-        // dd(compact('tickets'));
-        return view('ticket.index', compact('tickets'));
+        $user = auth()->user();
+        // $tickets = Ticket::all(); // 取得全部資料
+        // $tickets = $user->isAdmin ? Ticket::orderBy('created_at', 'desc')->get() : $user->tickets; // 只取得自己的
+        $tickets = $user->isAdmin ? Ticket::latest()->get() : $user->tickets; // 只取得自己的
+        // dd($tickets);
+        return view('ticket.index', compact('tickets', 'user'));
     }
 
     /**
@@ -76,11 +77,10 @@ class TicketController extends Controller
         $ticket->update($request->except('attachment')); // 此方式不會更新附件 (上面簡化)
 
         // 如果改變狀態會發送通知
-        if ($request->has('status')){
-            $user = User::find($ticket->user_id);
-            // dd($user->notify());
+        if ($request->has('status')) {
+            // $user = User::find($ticket->user_id);
             // $user->notify(new TicketUpdatedNotification($ticket));
-            return (new TicketUpdatedNotification($ticket))->toMail($user);
+            $ticket->user->notify(new TicketUpdatedNotification($ticket)); // 使用關係式
         }
 
         // 先刪除後存檔

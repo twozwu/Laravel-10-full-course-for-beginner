@@ -10,7 +10,11 @@
             @forelse ($tickets as $ticket)
                 <div class="flex justify-between p-4">
                     {{-- <a href="{{ route('ticket.show', $ticket->id) }}">{{ $ticket->title }}</a> --}}
-                    <a href="{{ route('ticket.show', $ticket) }}">{{ $ticket->title }}</a>
+                    <a href="{{ route('ticket.show', $ticket) }}">{{ $ticket->title }}
+                        @if ($user->isAdmin)
+                        - ({{ $ticket->user->name }})
+                        @endif
+                    </a>
                     <p>{{ $ticket->created_at->diffForHumans() }}</p>
                 </div>
             @empty
