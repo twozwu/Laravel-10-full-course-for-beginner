@@ -25,8 +25,8 @@
                         <form action="{{ route('ticket.update', $ticket) }}" method="POST">
                             @csrf
                             @method('patch')
-                            <input type="hidden" name="status" value="approved" />
-                            <x-primary-button>Approve</x-primary-button>
+                            <input type="hidden" name="status" value="resolved" />
+                            <x-primary-button>Resolved</x-primary-button>
                         </form>
                         <form action="{{ route('ticket.update', $ticket) }}" method="POST" class="inline">
                             @csrf
